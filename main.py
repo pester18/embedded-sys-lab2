@@ -1,7 +1,8 @@
 from pseudo_rand_signal import generate_signal
 from time import perf_counter
-from fourier_trans import fft, dft
 import matplotlib.pyplot as plt
+from dft_thread import DFTthread
+#from fourier_trans import fft, dft
 
 
 def Rxx(arr, t):
@@ -58,11 +59,18 @@ class main:
 
     signalValues = [point[1] for point in points1]
 
-    DFTList = dft(signalValues)
+    #DFTList = dft(signalValues)
     #print(DFTList)
-    FFTList = fft(signalValues)
+    #FFTList = fft(signalValues)
     #print(FFTList)
 
+    dft_thr1 = DFTthread(signalValues, 0, 512)
+    dft_thr2 = DFTthread(signalValues, 512, 1024)
+
+    dtf_sublist1 = dft_thr1.run()
+    dtf_sublist2 = dft_thr2.run()
+    DFTList = dtf_sublist1 + dtf_sublist2
+
     plt.plot([x for x in range(N)], DFTList, color='b')
-    plt.plot([x for x in range(N)], FFTList, color='r')
+    #plt.plot([x for x in range(N)], FFTList, color='r')
     plt.show()
